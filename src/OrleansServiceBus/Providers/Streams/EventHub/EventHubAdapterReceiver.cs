@@ -12,14 +12,14 @@ using Orleans.Streams;
 
 namespace Orleans.ServiceBus.Providers
 {
-    internal class EventHubPartitionConfig
+    public class EventHubPartitionConfig
     {
         public IEventHubSettings Hub { get; set; }
         public string Partition { get; set; }
     }
 
 
-    internal class EventHubAdapterReceiver : IQueueAdapterReceiver, IQueueCache
+    public class EventHubAdapterReceiver : IQueueAdapterReceiver, IQueueCache
     {
         public const int MaxMessagesPerRead = 1000;
         private static readonly TimeSpan ReceiveTimeout = TimeSpan.FromSeconds(5);
@@ -40,7 +40,7 @@ namespace Orleans.ServiceBus.Providers
         private readonly string hubAgeOfMessagesBeingProcessed;
         private readonly string partitionAgeOfMessagesBeingProcessed;
 
-        private IEventHubQueueCache cache;
+        protected IEventHubQueueCache cache;
         private EventHubReceiver receiver;
         private IStreamQueueCheckpointer<string> checkpointer;
         private AggregatedQueueFlowController flowController;
@@ -147,7 +147,7 @@ namespace Orleans.ServiceBus.Providers
             return false;
         }
 
-        public IQueueCacheCursor GetCacheCursor(IStreamIdentity streamIdentity, StreamSequenceToken token)
+        public virtual IQueueCacheCursor GetCacheCursor(IStreamIdentity streamIdentity, StreamSequenceToken token)
         {
             return new Cursor(cache, streamIdentity, token);
         }

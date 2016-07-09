@@ -23,7 +23,7 @@ namespace Orleans.ServiceBus.Providers
         protected EventHubStreamProviderConfig adapterConfig;
         protected IEventHubSettings hubSettings;
         protected ICheckpointerSettings checkpointerSettings;
-        private IEventHubQueueMapper streamQueueMapper;
+        protected IEventHubQueueMapper streamQueueMapper;
         private string[] partitionIds;
         private ConcurrentDictionary<QueueId, EventHubAdapterReceiver> receivers;
         private EventHubClient client;
@@ -201,7 +201,7 @@ namespace Orleans.ServiceBus.Providers
             return receivers.GetOrAdd(queueId, q => MakeReceiver(queueId));
         }
 
-        private EventHubAdapterReceiver MakeReceiver(QueueId queueId)
+        protected virtual EventHubAdapterReceiver MakeReceiver(QueueId queueId)
         {
             var config = new EventHubPartitionConfig
             {
